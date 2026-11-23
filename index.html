@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mesa de ayuda del campus</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <h1>Mesa de ayuda del campus</h1>
+
+    <p class="subtitulo">
+        Sistema de solicitudes de soporte técnico
+    </p>
+
+    <div class="tarjeta">
+
+        <h2>Registrar solicitud</h2>
+
+        <form id="formTicket">
+
+            <label for="titulo">Título del problema:</label>
+
+            <input
+                type="text"
+                id="titulo"
+                maxlength="150"
+                placeholder="Ej. No funciona el proyector"
+                required
+            >
+
+            <button type="submit">
+                Crear solicitud
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="tarjeta">
+
+        <h2>Solicitudes registradas</h2>
+
+        <button class="actualizar" onclick="consultarTickets()">
+            Actualizar lista
+        </button>
+
+        <div id="listaTickets">
+            Cargando solicitudes...
+        </div>
+
+    </div>
+
+    <div class="tarjeta">
+
+        <h2>Respuesta del servicio</h2>
+
+        <pre id="respuesta">Esperando una petición...</pre>
+
+    </div>
+
+</div>
+
+<script>
+
+const API = 'api.php';
+
+function mostrarRespuesta(codigo, datos) {
+
+    document.getElementById('respuesta').textContent =
+        'HTTP ' + codigo + '\n\n' +
+        JSON.stringify(datos, null, 2);
+
+}
+
+async function consultarTickets() {
+
+    try {
+
+        const response = await fetch(API);
+
+        const datos = await response.json();
+
+        mostrarRespuesta(response.status, datos);
+
+        const lista = document.getElementById('listaTickets');
+
+        lista.innerHTML = '';
+
+        if (datos.length === 0) {
+
+            lista.textContent = 'Todavía no hay solicitudes registradas.';
+
+            return;
+
+        }
+
+        datos.forEach(ticket => {
+
+            const elemento = document.createElement('div');
+
+            elemento.className = 'ticket';
+
+            const informacion = document.createElement('div');
+
+            const titulo = document.createElement('strong');
+
+            titulo.textContent = '#' + ticket.id + ' - ' + ticket.titulo;
+
+            const estado = document.createElement('p');
+
+            estado.className = 'estado ' + ticket.estado;
+
+            estado.textContent = 'Estado: ' + ticket.estado;
+
+            informacion.append(titulo, estado);
+
+            elemento.appendChild(informacion);
+
+            if (ticket.estado === 'abierta') {
+
+                const boton = document.createElement('button');
+
+                boton.className = 'cerrar';
+
+                boton.textContent = 'Cerrar solicitud';
+
+                boton.onclick = () => cerrarTicket(ticket.id);
+
+                elemento.appendChild(boton);
+
+            }
+
+            lista.appendChild(elemento);
+
+        });
+
+    } catch (error) {
+
+        document.getElementById('respuesta').textContent =
+            'Error de conexión: ' + error.message;
+
+    }
+
+}
+
+document.getElementById('formTicket').addEventListener(
+    'submit',
+    async function(event) {
+
+        event.preventDefault();
+
+        const titulo = document.getElementById('titulo').value;
+
+        try {
+
+            const response = await fetch(API, {
+
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+                    titulo: titulo
+                })
+
+            });
+
+            const datos = await response.json();
+
+            mostrarRespuesta(response.status, datos);
+
+            if (response.ok) {
+
+                document.getElementById('titulo').value = '';
+
+                consultarTickets();
+
+            }
+
+        } catch (error) {
+
+            document.getElementById('respuesta').textContent =
+                'Error de conexión: ' + error.message;
+
+        }
+
+    }
+);
+
+async function cerrarTicket(id) {
+
+    try {
+
+        const response = await fetch(API + '?id=' + id, {
+
+            method: 'PATCH',
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                estado: 'cerrada'
+            })
+
+        });
+
+        const datos = await response.json();
+
+        mostrarRespuesta(response.status, datos);
+
+        consultarTickets();
+
+    } catch (error) {
+
+        document.getElementById('respuesta').textContent =
+            'Error de conexión: ' + error.message;
+
+    }
+
+}
+
+consultarTickets();
+
+</script>
+
+</body>
+</html>
