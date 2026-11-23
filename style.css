@@ -1,0 +1,172 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 40px 20px;
+    background: #f7f3fc;
+    color: #493263;
+}
+
+.contenedor {
+    max-width: 850px;
+    margin: auto;
+}
+
+h1 {
+    color: #7952a8;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+h2 {
+    color: #634486;
+    margin-top: 0;
+}
+
+.subtitulo {
+    text-align: center;
+    color: #9a88ad;
+    margin-bottom: 35px;
+}
+
+.tarjeta {
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 18px;
+    margin-bottom: 22px;
+    box-shadow: 0 5px 20px rgba(104, 73, 143, 0.08);
+    border: 1px solid #eee6f7;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 12px 0;
+    border: 1px solid #ded1ed;
+    border-radius: 10px;
+    outline: none;
+    background: #fcfaff;
+    color: #493263;
+    transition: 0.2s;
+}
+
+input:focus {
+    border-color: #a78bca;
+    box-shadow: 0 0 0 3px #eee5f8;
+}
+
+input::placeholder {
+    color: #b5a7c5;
+}
+
+button {
+    border: none;
+    padding: 12px 19px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: white;
+    background: #9270b8;
+    margin: 4px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #7952a8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px #7952a833;
+}
+
+.cerrar {
+    background: #b28acb;
+}
+
+.cerrar:hover {
+    background: #9566b5;
+}
+
+.actualizar {
+    background: #695080;
+}
+
+.actualizar:hover {
+    background: #493263;
+}
+
+.ticket {
+    background: #fcfaff;
+    border: 1px solid #eee5f6;
+    border-radius: 13px;
+    padding: 17px;
+    margin: 14px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transition: 0.2s;
+}
+
+.ticket:hover {
+    border-color: #d5c2e9;
+    transform: translateY(-2px);
+}
+
+.estado {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 13px;
+    border-radius: 20px;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.abierta {
+    color: #a87524;
+    background: #fff1d6;
+    border: 1px solid #f4dfb5;
+}
+
+.cerrada {
+    color: #43876c;
+    background: #e1f3e9;
+    border: 1px solid #c6e7d3;
+}
+
+#respuesta {
+    white-space: pre-wrap;
+    background: #f8f4fc;
+    color: #60477e;
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid #eee5f6;
+    overflow-wrap: anywhere;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+@media (max-width: 550px) {
+
+    body {
+        padding: 20px 12px;
+    }
+
+    .ticket {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .tarjeta {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+}
